@@ -1,0 +1,269 @@
+/*
+ * s6.css
+ * ~~~~~~~~
+ *
+ * Sphinx stylesheet -- s6 presentation theme.
+ *
+ * :copyright: Copyright 2011 by Takayuki SHIMIZUKAWA, see AUTHORS.txt .
+ * :license: MIT, see LICENSE.txt for details.
+ *
+ */
+
+@import url("basic.css");
+
+@font-face
+{
+    font-family: mplus-1m-regular;
+    src: url('http://mplus-fonts.sourceforge.jp/webfonts/mplus-1m-regular.ttf')
+    format("truetype");
+}
+
+* {
+
+    font-family : 'mplus-1m-regular' !important ;
+    /* font-weight: bold  !important; */
+}
+
+/* -- body styles ----------------------------------------------------------- */
+
+blockquote {
+    margin-left: 5% !important;
+}
+
+li {
+    margin-bottom: 1% !important;
+}
+
+div.related,
+a.headerlink {
+	display: none;
+}
+#searchbox {
+	visibility: hidden;
+}
+
+div.header a {
+	text-decoration: none;
+	height: 100em;
+	display: block;
+}
+div.header a:hover {
+	color: orange;
+}
+
+div.footer {
+	position: fixed;
+	z-index: 1000;
+	bottom: 0;
+	right: 0;
+	background-color: #81a2be;
+	color: white;
+	font-size: 100%;
+	padding: 0.2em;
+}
+div.footer a {
+	color: orange;
+	text-decoration: none;
+}
+div.footer:hover {
+	font-size: 100%;
+	background-color: #81a2be;
+	color: white;
+	border: 0 solid gray;
+	border-width: 0.1em 0 0 0.2em;
+}
+div.footer:hover a {
+	color: blue;
+}
+div.footer span.hidden {
+	display: none;
+}
+div.footer:hover span.hidden {
+	display: inline;
+}
+
+div.related {
+	display: none;
+}
+#searchbox {
+	visibility: hidden;
+}
+
+div.documentwrapper {
+	margin-left: 6px;
+	position: absolute;
+	z-index: 10;
+}
+
+div.bodywrapper {
+	margin: 0 0 0 6px;
+	z-index: 0;
+}
+
+div.sphinxsidebar {
+	background-color: #11303D;
+	position: fixed;
+	left: 0;
+	margin: 0;
+	height: 800px;
+	z-index: 0;
+}
+
+div.sphinxsidebar:hover {
+	z-index: 100;
+}
+
+/* ------ s6 styles -----------*/
+
+.s6 h1 {
+    font-size: 275% !important;
+}
+
+.s6 h2,
+.s6 h3 {
+    padding: 1% 3% !important;
+}
+
+.s6 .page.default > h2 {
+    font-size: 80% !important;
+}
+
+
+.s6 .page {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    margin: 20;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    line-height: 1.0em;
+}
+
+.s6 .page.default > p {
+    font-size: 105% !important;
+    margin: 1% 1% 1% !important;
+}
+
+.s6 .page.default > ul {
+    font-size: 80%;
+    margin: 1% 3% 3% 5% !important;
+}
+
+.s6 .page pre {
+    padding: 5px;
+    background-color: #f6f6f6;
+    color: #333333;
+    line-height: 120%;
+    border: 3px solid #de935f;
+    border-left: none;
+    border-right: none;
+    font-size: 80%;
+}
+
+.s6 .page dd {
+    margin-left: 1em;
+}
+
+.s6 .page .figure {
+    position: absolute;
+    right: 0.5em;
+    bottom: 0.5em;
+    z-index: 0;
+}
+
+.s6 .page .figure img {
+    width: 100%;
+}
+
+.s6 .page strong {
+    font-weight: bold;
+    font-size: 120%;
+    color: #f66;
+}
+
+.s6 .page strong.command {
+    color: #0ff;
+}
+
+
+/* ------ s6 color thema -----------*/
+
+.s6.sphinx {
+    background-color: white;
+    color: black;
+    
+}
+
+.s6.sphinx a {
+    color: blue;
+}
+
+.s6.sphinx h1 {
+    color: white;
+    /* background-image: url(title_bg.gif); */
+    font-weight: bold;
+    background-color: #81a2be;
+}
+
+.s6.sphinx h2,
+.s6.sphinx h3 {
+    color: white;
+    /* background-image: url(title_bg.gif); */
+    font-weight: bold;
+    background-color: #b5bd68;
+}
+
+.s6.sphinx .page {
+    /* background-image: url(background.png); */
+}
+
+.s6.sphinx .page.default > pre {
+    border-top-color: #666;
+    border-bottom-color: #666;
+    background-color: black;
+}
+
+.s6.sphinx .page.default > pre > strong {
+    color: red;
+    font-weight: bold;
+}
+
+.s6.sphinx .index.page > .inner.s6 {
+    background: transparent;
+}
+
+.s6.sphinx .index.page > .inner.s6 > .page {
+    background: transparent;
+}
+
+.s6.sphinx .index.page > .inner.s6 > .page > .wrapper.selected {
+    background: #81a2be;
+}
+
+.s6.sphinx .index.page pre {
+    overflow: hidden;
+}
+
+.s6.sphinx .index {
+    background-color: gray;
+}
+
+/* ------ s6 print style --------*/
+
+@media print{
+.s6{
+  top:0 !IMPORTANT;
+  left:0 !IMPORTANT;
+  width:180mm !IMPORTANT;
+  height:265mm !IMPORTANT;
+}
+
+.s6 .index.page .inner.s6 .page .wrapper{
+  width:47% !IMPORTANT;
+  height:32% !IMPORTANT;
+  font-size:40%;
+  line-height:1.2;
+}}
+
+

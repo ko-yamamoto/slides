@@ -1,0 +1,12 @@
+========
+AUTHORS
+========
+
+Sphinx template, css, packaging
+================================
+* Takayuki SHIMIZUKAWA <shimizukawa AT gmail.com> sphinx-users.jp
+
+s6.js
+=======
+* (c) 2007 Cybozu Labs, Inc.
+

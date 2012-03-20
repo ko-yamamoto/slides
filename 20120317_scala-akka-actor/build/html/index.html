@@ -1,0 +1,833 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Scala/Akka Actor</title>
+    
+    <link rel="stylesheet" href="static/s6.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+<script type="text/javascript" src="static/jquery.js"></script>
+<script type="text/javascript" src="static/s6.js"></script>
+<script type="text/javascript">
+// <![CDATA[
+
+var bodyStyle = {
+    width: '100%',
+    height: '100%',
+    padding: '0',
+    margin: '0',
+    overflow: 'hidden',
+    backgroundColor: 'white',
+};
+
+s6.css('html', bodyStyle);
+s6.css('body', bodyStyle);
+s6.css('.s6 .page.default > h2', {margin:'0'});
+
+var pr;
+s6.attach(s6, 'ready', function ready() {
+    var html = document.documentElement;
+    var height = html.offsetHeight;
+    var width = html.offsetWidth;
+    var top = 0;
+    var left = 0;
+
+    if (height / width < 0.75) {
+        var originalWidth = width;
+        width = height / 0.75;
+        left = (originalWidth - width) / 2 + 'px';
+    }
+    else {
+        var originalHeight = height;
+        height = width * 0.75;
+        top = (originalHeight - height) / 2 + 'px';
+    }
+
+    var result;
+    if (result = document.cookie.match(/page=(\d+)/)) {
+        var startIndex = +result[1];
+    }
+
+    var container = $('.section')[0];
+    pr = new s6.Presentation({
+            thema: 'sphinx',
+            element: container,
+            width: width,
+            height: height,
+            startIndex: startIndex,
+            fontSize: 0.08
+        });
+    pr.style.left = left;
+    pr.style.top = top;
+    pr.start();
+
+    var indexNoOutline = false;
+
+    pr.funcPages.index.attachPage('click', function(i, element, wrapper) {
+        indexNoOutline = true;
+        setTimeout(function() {
+            indexNoOutline =false
+        }, 1000);
+        wrapper.style.background = '';
+        pr.go(i);
+    });
+
+    pr.funcPages.index.attachPage('mouseover', function(i, element, wrapper) {
+        if (indexNoOutline) return;
+        wrapper.className += ' selected';
+    });
+    
+    pr.funcPages.index.attachPage('mouseout', function(i, element, wrapper) {
+        wrapper.className = 'wrapper';
+    });
+
+    try {
+        var isIframe = !(window.parent == window);
+    } catch(e) {
+        isIframe = true;
+    }
+
+    s6.attach(document, 'click', 'step', 0, pr);
+    s6.attach(document, 'keypress Right', 'step', 0, pr);
+    s6.attach(document, 'keypress Left',  'prev', 0, pr);
+    s6.attach(document, 'keypress Up',    function() { pr.go('index') });
+    s6.attach(document, 'keypress Down',  'back', 0, pr);
+});
+
+// save current page
+setInterval(function() {
+    document.cookie = 'page=' + pr.index;
+}, 1000);
+// ]]>
+</script>
+
+
+  </head>
+  <body>
+<div class="header">
+<div style="float:right;"><a href="#">≫</a></div>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="#">20120317 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body">
+            
+  <div class="section" id="scala-akka-actor">
+<h1>Scala/Akka Actor<a class="headerlink" href="#scala-akka-actor" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="index">
+<h2>index<a class="headerlink" href="#index" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Scala?</li>
+<li>Akka Actor?</li>
+<li>Sample</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="scala">
+<h2>Scala<a class="headerlink" href="#scala" title="Permalink to this headline">¶</a></h2>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id1">
+<h2>Scala<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>JVM</li>
+<li>Better Java</li>
+<li>関数型言語</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id2">
+<h2>Scala<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>JVM 上で動作</p>
+<ul class="simple">
+<li>コンパイルすると class ファイルに</li>
+<li>Java の資産を利用可能</li>
+<li>ライブラリ</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id3">
+<h2>Scala<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<p>Better Java</p>
+<ul class="simple">
+<li>Java のように書ける</li>
+<li>便利な関数・文法</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id4">
+<h2>Scala<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<p>関数型言語</p>
+<ul class="simple">
+<li>「副作用なし」</li>
+<li>「第1級関数」</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id5">
+<h2>Scala<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
+<p>「副作用なし」</p>
+<ul>
+<li><p class="first">val</p>
+<blockquote>
+<div><div class="highlight-scala"><div class="highlight"><pre><span class="k">val</span> <span class="n">i</span> <span class="k">=</span> <span class="mi">1</span>
+<span class="n">i</span> <span class="k">=</span> <span class="mi">2</span> <span class="c1">// コンパイルエラー!!</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">var</p>
+<blockquote>
+<div><div class="highlight-scala"><div class="highlight"><pre><span class="k">var</span> <span class="n">i</span> <span class="k">=</span> <span class="mi">1</span>
+<span class="n">i</span> <span class="k">=</span> <span class="mi">2</span> <span class="c1">// コンパイル OK</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id6">
+<h2>Scala<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
+<p>val と var</p>
+<blockquote>
+<div><div class="highlight-scala"><div class="highlight"><pre><span class="k">val</span> <span class="k">=</span> <span class="n">values</span>
+<span class="k">var</span> <span class="k">=</span> <span class="n">variables</span>
+</pre></div>
+</div>
+<p>-&gt; val を推奨</p>
+</div></blockquote>
+<ul class="simple">
+<li>副作用なし</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id7">
+<h2>Scala<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">sample</p>
+<blockquote>
+<div><div class="highlight-scala"><div class="highlight"><pre><span class="c1">// Sample1.scala</span>
+<span class="k">object</span> <span class="nc">Sample</span> <span class="k">extends</span> <span class="nc">App</span> <span class="o">{</span>
+
+  <span class="n">println</span><span class="o">(</span><span class="s">&quot;Hello World!!!&quot;</span><span class="o">)</span>
+
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>run</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>scalac Sample1.scala
+<span class="nv">$ </span>scala Sample
+</pre></div>
+</div>
+<p>-&gt; Hello World!!!</p>
+</div></blockquote>
+</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id8">
+<h2>Scala<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">スクリプトとしても実行可能</p>
+<blockquote>
+<div><div class="highlight-scala"><div class="highlight"><pre><span class="c1">// Sample2.scala</span>
+<span class="n">println</span><span class="o">(</span><span class="s">&quot;Hello World!!!&quot;</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>run</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>scala Sample2.scala
+</pre></div>
+</div>
+<p>-&gt; Hello World!!!</p>
+</div></blockquote>
+</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="akka-actor">
+<h2>Akka Actor<a class="headerlink" href="#akka-actor" title="Permalink to this headline">¶</a></h2>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id9">
+<h2>Akka Actor<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h2>
+<p>Akka - <a class="reference external" href="http://goo.gl/evYro">http://goo.gl/evYro</a></p>
+<p>フレームワーク</p>
+<ul class="simple">
+<li>分散処理</li>
+<li>非同期処理</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id10">
+<h2>Akka Actor<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h2>
+<p>特徴</p>
+<ul class="simple">
+<li>非同期 - Actor モデル</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id11">
+<h2>Akka Actor<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Actor？ Thread？</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id12">
+<h2>Akka Actor<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h2>
+<p>Thread</p>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id13">
+<h2>Akka Actor<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h2>
+<p>Thread</p>
+<ul>
+<li><p class="first">共有データ・ロック</p>
+<blockquote>
+<div><img alt="images/mt.png" class="align-center" src="images/mt.png" />
+</div></blockquote>
+</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id14">
+<h2>Akka Actor<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h2>
+<p>Thread</p>
+<ul class="simple">
+<li>他のスレッドから変更される恐れ</li>
+<li>失敗 - デッドロック</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id15">
+<h2>Akka Actor<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h2>
+<p>Actor</p>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id16">
+<h2>Akka Actor<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h2>
+<p>Actor モデル</p>
+<ul>
+<li><p class="first">メッセージパッシング</p>
+<blockquote>
+<div><ul class="simple">
+<li>メッセージ送信</li>
+<li>メッセージ受信</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id17">
+<h2>Akka Actor<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h2>
+<p>Actor</p>
+<ul class="simple">
+<li>メッセージの送受信</li>
+<li>メッセージのキューイング</li>
+<li>メッセージ(の型)に応じた処理選択</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id18">
+<h2>Akka Actor<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h2>
+<p>Actor</p>
+<ul>
+<li><p class="first">メッセージ送信</p>
+<blockquote>
+<div><img alt="images/1.png" class="align-center" src="images/1.png" />
+</div></blockquote>
+</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id19">
+<h2>Akka Actor<a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h2>
+<p>Actor</p>
+<ul>
+<li><p class="first">処理</p>
+<blockquote>
+<div><img alt="images/2.png" class="align-center" src="images/2.png" />
+</div></blockquote>
+</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id20">
+<h2>Akka Actor<a class="headerlink" href="#id20" title="Permalink to this headline">¶</a></h2>
+<p>Actor</p>
+<ul>
+<li><p class="first">結果をメッセージとして返却</p>
+<blockquote>
+<div><img alt="images/3.png" class="align-center" src="images/3.png" />
+</div></blockquote>
+</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id21">
+<h2>Akka Actor<a class="headerlink" href="#id21" title="Permalink to this headline">¶</a></h2>
+<p>Actor</p>
+<ul>
+<li><p class="first">データのやり取りはメッセージ</p>
+</li>
+<li><p class="first">共有無し</p>
+<blockquote>
+<div><p>-&gt; ロックなし</p>
+</div></blockquote>
+</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id22">
+<h2>Akka Actor<a class="headerlink" href="#id22" title="Permalink to this headline">¶</a></h2>
+<p>Actor</p>
+<ul>
+<li><p class="first">必要なもの</p>
+<blockquote>
+<div><ul class="simple">
+<li>Actor(s) クラス</li>
+<li>メッセージクラス</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id23">
+<h2>Akka Actor<a class="headerlink" href="#id23" title="Permalink to this headline">¶</a></h2>
+<p>Actor</p>
+<ul>
+<li><p class="first">Actorクラス</p>
+<blockquote>
+<div><ul class="simple">
+<li>Main Actor</li>
+<li>Worker Actor</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id24">
+<h2>Akka Actor<a class="headerlink" href="#id24" title="Permalink to this headline">¶</a></h2>
+<p>Actor？</p>
+<ul class="simple">
+<li>あまり見かけない・・・</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id25">
+<h2>Akka Actor<a class="headerlink" href="#id25" title="Permalink to this headline">¶</a></h2>
+<p>Actor？</p>
+<ul class="simple">
+<li>Thread 採用の言語が多い</li>
+<li>Java での実装難</li>
+</ul>
+<p>-&gt; Scala 標準 Actor</p>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id26">
+<h2>Akka Actor<a class="headerlink" href="#id26" title="Permalink to this headline">¶</a></h2>
+<p>Scala Akka</p>
+<ul class="simple">
+<li>Actor モデルを標準化</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id27">
+<h2>Akka Actor<a class="headerlink" href="#id27" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">import とメッセージの作成</p>
+<blockquote>
+<div><div class="highlight-scala"><div class="highlight"><pre><span class="k">import</span> <span class="nn">scala.actors.Actor</span>
+<span class="k">import</span> <span class="nn">scala.actors.Actor._</span>
+
+<span class="c1">// メッセージ用クラス</span>
+<span class="k">case</span> <span class="k">object</span> <span class="nc">Msg</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id28">
+<h2>Akka Actor<a class="headerlink" href="#id28" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">Actor の宣言</p>
+<blockquote>
+<div><div class="highlight-scala"><div class="highlight"><pre><span class="k">class</span> <span class="nc">SampleActor</span> <span class="k">extends</span> <span class="nc">Actor</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="n">act</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">receive</span> <span class="o">{</span>
+      <span class="c1">// Msg クラス受信時の処理</span>
+      <span class="k">case</span> <span class="nc">Msg</span> <span class="k">=&gt;</span>
+        <span class="n">println</span><span class="o">(</span><span class="s">&quot;Ping!!&quot;</span><span class="o">)</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id29">
+<h2>Akka Actor<a class="headerlink" href="#id29" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">実行</p>
+<blockquote>
+<div><div class="highlight-scala"><div class="highlight"><pre><span class="k">object</span> <span class="nc">Main</span> <span class="k">extends</span> <span class="nc">App</span> <span class="o">{</span>
+
+  <span class="k">val</span> <span class="n">sampleActor</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">SampleActor</span>
+  <span class="c1">// Actor 開始</span>
+  <span class="n">sampleActor</span><span class="o">.</span><span class="n">start</span>
+  <span class="c1">// メッセージ送信</span>
+  <span class="n">sampleActor</span> <span class="o">!</span> <span class="nc">Show</span>
+
+<span class="o">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id30">
+<h2>Akka Actor<a class="headerlink" href="#id30" title="Permalink to this headline">¶</a></h2>
+<p>Scala Akka</p>
+<ul>
+<li><p class="first">シンプル</p>
+</li>
+<li><p class="first">複雑なことは実装が必要</p>
+<blockquote>
+<div><ul class="simple">
+<li>ルーティング</li>
+<li>バランサー</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id31">
+<h2>Akka Actor<a class="headerlink" href="#id31" title="Permalink to this headline">¶</a></h2>
+<p>-&gt; <strong>Akka</strong>!!!</p>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id32">
+<h2>Akka Actor<a class="headerlink" href="#id32" title="Permalink to this headline">¶</a></h2>
+<p>Akka:</p>
+<div class="highlight-python"><pre>Build powerful concurrent &amp;
+distributed applications
+more easily.</pre>
+</div>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id33">
+<h2>Akka Actor<a class="headerlink" href="#id33" title="Permalink to this headline">¶</a></h2>
+<p>Akka Actor</p>
+<ul class="simple">
+<li>Java でも Actor モデル実装可能</li>
+<li>より簡単に記述可能</li>
+<li>設定ファイルでの Actor 設定可能</li>
+<li>ロードバランサー・ルーティング</li>
+<li>自己修復</li>
+<li>remote Actor</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id34">
+<h2>Akka Actor<a class="headerlink" href="#id34" title="Permalink to this headline">¶</a></h2>
+<p>Akka Actor</p>
+<ul>
+<li><p class="first">Java</p>
+<blockquote>
+<div><div class="highlight-java"><div class="highlight"><pre><span class="c1">// Actor 宣言</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MasterActor</span>
+             <span class="kd">extends</span> <span class="n">UntypedActor</span> <span class="o">{</span>
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onReceive</span><span class="o">(</span><span class="n">Object</span> <span class="n">msg</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">msg</span> <span class="k">instanceof</span> <span class="n">Hoge</span><span class="o">)</span> <span class="o">{</span>
+    <span class="o">.</span>
+    <span class="o">.</span>
+    <span class="o">.</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id35">
+<h2>Akka Actor<a class="headerlink" href="#id35" title="Permalink to this headline">¶</a></h2>
+<p>Akka Actor</p>
+<ul>
+<li><p class="first">Java</p>
+<blockquote>
+<div><div class="highlight-java"><div class="highlight"><pre><span class="c1">// 開始</span>
+<span class="n">ActorRef</span> <span class="n">actor</span> <span class="o">=</span>
+    <span class="n">system</span><span class="o">.</span><span class="na">actorOf</span><span class="o">(</span>
+        <span class="k">new</span> <span class="nf">Props</span><span class="o">(</span><span class="k">new</span> <span class="n">UntypedActorFactory</span><span class="o">()</span> <span class="o">{</span>
+            <span class="kd">public</span> <span class="n">UntypedActor</span> <span class="nf">create</span><span class="o">()</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="k">new</span> <span class="nf">SampleActor</span><span class="o">();</span>
+            <span class="o">}</span>
+<span class="o">}),</span> <span class="s">&quot;actor&quot;</span><span class="o">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id36">
+<h2>Akka Actor<a class="headerlink" href="#id36" title="Permalink to this headline">¶</a></h2>
+<p>Akka Actor</p>
+<ul>
+<li><p class="first">設定ファイル</p>
+<blockquote>
+<div><ul class="simple">
+<li>ログレベル設定</li>
+<li>ルータータイプ設定</li>
+<li>Akka 用動作パラメータ変更</li>
+<li>などなど</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id37">
+<h2>Akka Actor<a class="headerlink" href="#id37" title="Permalink to this headline">¶</a></h2>
+<p>Akka Actor</p>
+<ul>
+<li><p class="first">設定ファイル:</p>
+<div class="highlight-python"><pre>actor.deployment {
+  // 名前設定
+  /masterActor/router {
+    // ルータータイプ設定
+    router = round-robin
+    // ルーターに登録する Actor の数
+    nr-of-instances = 3
+    .
+    .</pre>
+</div>
+</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id38">
+<h2>Akka Actor<a class="headerlink" href="#id38" title="Permalink to this headline">¶</a></h2>
+<p>Akka Actor</p>
+<ul>
+<li><p class="first">設定ファイル:</p>
+<div class="highlight-python"><pre>actor.deployment {
+  /masterActor/router {
+    // ルータータイプ設定
+    router = smallest-mailbox
+    // ルーターに登録する Actor の数を動的に数を変更
+    resizer {
+      lower-bound = 3
+      upper-bound = 10
+      .</pre>
+</div>
+</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id39">
+<h2>Akka Actor<a class="headerlink" href="#id39" title="Permalink to this headline">¶</a></h2>
+<p>Akka Actor</p>
+<ul>
+<li><p class="first">Router</p>
+<blockquote>
+<div><ul class="simple">
+<li>Routees として Actor を登録</li>
+<li>Routees にメッセージを割り振る</li>
+<li>数種類のタイプ</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id40">
+<h2>Akka Actor<a class="headerlink" href="#id40" title="Permalink to this headline">¶</a></h2>
+<p>Akka Actor</p>
+<ul>
+<li><p class="first">Router のタイプ</p>
+<blockquote>
+<div><ul class="simple">
+<li>round-robin</li>
+<li>random</li>
+<li>smallest-mailbox</li>
+<li>scatter-gather</li>
+<li>broadcast</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id41">
+<h2>Akka Actor<a class="headerlink" href="#id41" title="Permalink to this headline">¶</a></h2>
+<p>Akka Actor</p>
+<ul>
+<li><p class="first">Router のメッセージ</p>
+<blockquote>
+<div><ul>
+<li><p class="first">Normal Messages</p>
+</li>
+<li><dl class="first docutils">
+<dt>Broadcast Messages</dt>
+<dd><p class="first last">-&gt; 全ての Routees へ</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id42">
+<h2>Akka Actor<a class="headerlink" href="#id42" title="Permalink to this headline">¶</a></h2>
+<p>Akka Actor</p>
+<ul>
+<li><p class="first">Router の作成1</p>
+<blockquote>
+<div><div class="highlight-scala"><div class="highlight"><pre><span class="o">/</span><span class="n">sampleActor</span><span class="o">/</span><span class="n">router</span> <span class="o">{</span>
+  <span class="n">router</span> <span class="k">=</span> <span class="n">round</span><span class="o">-</span><span class="n">robin</span>
+  <span class="n">nr</span><span class="o">-</span><span class="n">of</span><span class="o">-</span><span class="n">instances</span> <span class="k">=</span> <span class="mi">3</span>
+             <span class="o">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id43">
+<h2>Akka Actor<a class="headerlink" href="#id43" title="Permalink to this headline">¶</a></h2>
+<p>Akka Actor</p>
+<ul>
+<li><p class="first">Router の作成2</p>
+<blockquote>
+<div><div class="highlight-scala"><div class="highlight"><pre><span class="nc">ActorRef</span> <span class="n">router</span> <span class="k">=</span>
+  <span class="n">system</span><span class="o">.</span><span class="n">actorOf</span><span class="o">(</span>
+    <span class="k">new</span> <span class="nc">Props</span><span class="o">(</span><span class="nc">ExampleActor</span><span class="o">.</span><span class="n">class</span><span class="o">)</span>
+       <span class="o">.</span><span class="n">withRouter</span><span class="o">(</span>
+          <span class="k">new</span> <span class="nc">FromConfig</span><span class="o">()),</span>
+          <span class="s">&quot;router&quot;</span>
+       <span class="o">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id44">
+<h2>Akka Actor<a class="headerlink" href="#id44" title="Permalink to this headline">¶</a></h2>
+<p>Akka Actor</p>
+<ul class="simple">
+<li>Sample</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+<div class="section" id="id45">
+<h2>終わりに<a class="headerlink" href="#id45" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Scala で簡潔なコードを</li>
+<li>Akka で見通しの良い並列処理を</li>
+</ul>
+<script>
+if(typeof s6 != 'undefined'){s6.page({effect: 'slide'});}</script>
+</div>
+</div>
+
+
+          </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="#">20120317 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+<div class="footer">
+    <span>Scala/Akka Actor :: 2012, nishikawasasaki</span><br />
+    <span class="hidden">操作方法: 上下左右キーで操作です</span>
+</div>
+
+  </body>
+</html>
