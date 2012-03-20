@@ -11,11 +11,17 @@
 
 @import url("basic.css");
 
+@font-face
+{
+    font-family: mplus-1m-regular;
+    src: url('http://mplus-fonts.sourceforge.jp/webfonts/mplus-1m-regular.ttf')
+    format("truetype");
+}
 
 * {
 
-    font-family : 'Migu 1VS' !important ;
-    font-weight: bold  !important;
+    font-family : 'mplus-1m-regular' !important ;
+    /* font-weight: bold  !important; */
 }
 
 /* -- body styles ----------------------------------------------------------- */
